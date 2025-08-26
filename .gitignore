@@ -1,0 +1,43 @@
+# Build results
+bin/
+obj/
+out/
+Debug/
+Release/
+
+# VS Code settings
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# OS-specific files
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Logs
+*.log
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Visual Studio coverage and test results
+*.coverage
+*.coveragexml
+TestResult.xml
+TestResults/
