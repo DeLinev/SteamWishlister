@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.ComponentModel.Design;
 
 namespace SteamWishlister;
 
@@ -40,14 +41,35 @@ class Program
         };
         wishlistCommand.Subcommands.Add(addCommand);
 
+        Command generateQueueCommand = new("genqueue", "Generate new queue of games");
+        wishlistCommand.Subcommands.Add(generateQueueCommand);
+
         addCommand.SetAction(async parseresult =>
         {
-            string? sessionId = parseresult.GetValue(sessionIdOption);
-            string? loginCookie = parseresult.GetValue(loginCookieOption);
-            string? gameId = parseresult.GetValue(gameIdOption);
+            string? sessionId = parseresult.GetValue(sessionIdOption) ?? "";
+            string? loginCookie = parseresult.GetValue(loginCookieOption) ?? "";
+            string? gameId = parseresult.GetValue(gameIdOption) ?? "";
 
             Wishlist wishlist = new(sessionId, loginCookie);
             await wishlist.AddGameAsync(gameId);
+        });
+
+        generateQueueCommand.SetAction(async parseresult =>
+        {
+            Console.WriteLine("Generating new game queue...");
+            string sessionId = parseresult.GetValue(sessionIdOption) ?? "";
+            string loginCookie = parseresult.GetValue(loginCookieOption) ?? "";
+
+            Wishlist wishlist = new(sessionId, loginCookie);
+            string[] gameIds = await wishlist.GenerateNewQueue();
+            if (!gameIds.Any())
+                return;
+
+            Console.WriteLine("Game ids:");
+            foreach (string gameId in gameIds)
+            {
+                Console.WriteLine(gameId);
+            }
         });
 
         await rootCommand.Parse(args).InvokeAsync();
