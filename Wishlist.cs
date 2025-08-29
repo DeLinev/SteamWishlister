@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http.Json;
-using System.Threading.Channels;
 
 namespace SteamWishlister;
 
@@ -41,7 +40,6 @@ class Wishlist
 
     public async Task AddGameAsync(string gameId)
     {
-        Console.WriteLine($"Adding game {gameId} to wishlist...");
         FormUrlEncodedContent content = new([
             new KeyValuePair<string, string>("sessionid", sessionId),
             new KeyValuePair<string, string>("appid", gameId)
@@ -52,10 +50,10 @@ class Wishlist
 
         var body = await response.Content.ReadFromJsonAsync<AddGameResponse>();
         if (body?.success ?? false)
-            Console.WriteLine($"Game was successfully added to wishlist!");
+            Console.WriteLine($"> Game {gameId} was successfully added to wishlist!");
         else
-            Console.WriteLine($"Failed to add game to wishlist.");
-        Console.WriteLine($"Games in wishlist: {body?.wishlistCount ?? 0}");
+            Console.WriteLine($"! Failed to add game to wishlist.");
+        Console.WriteLine($"> Games in wishlist: {body?.wishlistCount ?? 0}");
     }
 
     public async Task<string[]> GenerateNewQueue()

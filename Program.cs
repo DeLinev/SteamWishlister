@@ -31,7 +31,7 @@ class Program
         rootCommand.Options.Add(sessionIdOption);
         rootCommand.Options.Add(loginCookieOption);
 
-        Command wishlistCommand = new("wishlist", "Work with Steam Wishlist.");
+        Command wishlistCommand = new("wishlist", "Manage Steam Wishlist.");
         rootCommand.Subcommands.Add(wishlistCommand);
 
         Command addCommand = new("add", "Add a game to wishlist")
@@ -89,17 +89,17 @@ class Program
                     var gameIds = await wishlist.GenerateNewQueue();
                     if (!gameIds.Any())
                     {
-                        Console.WriteLine("Game queue wan't retrieved.");
+                        Console.WriteLine("! Game queue wan't retrieved.");
                         return;
                     }
 
-                    Console.WriteLine("Game queue retrieved.");
+                    Console.WriteLine("-> Game queue retrieved.");
                     await Task.WhenAll(gameIds.Select(wishlist.AddGameAsync));
-                    Thread.Sleep(5000);
+                    ConsoleSpinner.Spin(500);
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"An error occurred: {e.Message}");
+                    Console.WriteLine($"! An error occurred: {e.Message}");
                 }
             }
         });
